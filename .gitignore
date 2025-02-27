@@ -5,6 +5,10 @@
 .terraform/
 .terraform.lock.hcl
 
+# Local .terraform directories
+**/.terraform/*
+**/.terraform/**
+
 # Ignore logs and crash reports
 crash.log
 *.log
