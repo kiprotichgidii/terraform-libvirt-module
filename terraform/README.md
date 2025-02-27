@@ -22,9 +22,9 @@ This Terraform module uses the `libvirt` provider to create virtual machines (VM
 ```bash
 $ git clone https://github.com/giddy624/terraform-libvirt-module.git
 ```
-3. Navigate to `terraform-libvirt/terraform/examples/basic-usage` then modify the main.tf file according to your environment.
+3. Navigate to `terraform-libvirt/terraform/examples/` then modify the main.tf file according to your environment.
 ```bash
-$ cd terraform-libvirt/terraform/examples/basic-usage/main.tf
+$ cd terraform-libvirt/terraform/examples/main.tf
 ```
 4. Initialize Terraform with:
 ```bash
