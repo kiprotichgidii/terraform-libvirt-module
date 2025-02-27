@@ -1,5 +1,5 @@
 module "libvirt_vms" {
-  source            = "../modules/libvirt-vm"
+  source            = "./modules/libvirt-vm"
   instance_name     = "Ubuntu-24.04"
   instance_count    = 1
   memory            = 4096
