@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "libvirt" {
-  uri ="qemu:///system"
+  uri ="qemu+ssh://root@192.168.1.100/system"
 }
 
 # Storage Pool Definition
@@ -35,7 +35,7 @@ resource "libvirt_network" "network_interface" {
   mode = "nat"
   
   # Define the network address range
-  addresses = ["192.168.2.0/24"]  # Use an IP range that doesn’t conflict with your existing network
+  addresses = ["192.168.2.0/24"]  # Use an IP range that doesn’t conflict with the default libvirt network
 }
 
 # Define VM instances

@@ -11,4 +11,3 @@ output "instance_names" {
 #    for i in libvirt_domain.vm : i.network_interface[0].addresses[0]
 #  ]
 #}
-
