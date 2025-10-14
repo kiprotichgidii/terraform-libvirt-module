@@ -19,9 +19,9 @@ provider "libvirt" {
 # Cloud Images module reference
 #----------------------------------------------------------
 module "cloud_images" {
-  source = "../cloud-images"
-  version = var.os_version
-  os_name = var.os_name
+  source     = "../cloud-images"
+  version    = var.os_version
+  os_name    = var.os_name
   os_version = var.os_version
 }
 
@@ -29,11 +29,11 @@ module "cloud_images" {
 # Libvirt Network Creation
 #----------------------------------------------------------
 resource "libvirt_network" "vm_network" {
-  count = var.create_network ? 1 : 0
-  name   = var.network_name
-  mode   = var.network_mode
+  count     = var.create_network ? 1 : 0
+  name      = var.network_name
+  mode      = var.network_mode
   autostart = var.autostart_network
-  mtu = var.network_mode != "bridge" ? var.network_mtu : null
+  mtu       = var.network_mode != "bridge" ? var.network_mtu : null
   addresses = var.network_mode != "bridge" ? [var.network_cidr] : null
 
   dynamic "dhcp" {
@@ -49,9 +49,9 @@ resource "libvirt_network" "vm_network" {
 # Storage Pool Creation
 #----------------------------------------------------------
 resource "libvirt_pool" "storage_pool" {
-  count = var.create_storage_pool ? 1 : 0
-  name   = var.storage_pool_name
-  type   = var.pool_type_type
+  count     = var.create_storage_pool ? 1 : 0
+  name      = var.storage_pool_name
+  type      = var.pool_type_type
   autostart = true
   target {
     path = var.storage_pool_path
@@ -62,21 +62,21 @@ resource "libvirt_pool" "storage_pool" {
 # Random Resource Creation
 #----------------------------------------------------------
 resource "random_password" "root_password" {
-  count = var.set_root_password ? 1 : 0
-  length  = 16
-  special = true
+  count            = var.set_root_password ? 1 : 0
+  length           = 16
+  special          = true
   override_special = "_%@"
 }
 
 resource "random_password" "user_password" {
-  count = var.set_user_password ? 1 : 0
-  length  = 16
-  special = true
+  count            = var.set_user_password ? 1 : 0
+  length           = 16
+  special          = true
   override_special = "_%@"
 }
 
 resource "tls_private_key" "ssh_key" {
-  count = var.generate_ssh_key ? 1 : 0
+  count     = var.generate_ssh_key ? 1 : 0
   algorithm = "RSA"
   rsa_bits  = 4096
 }
@@ -85,30 +85,30 @@ resource "tls_private_key" "ssh_key" {
 # Files Creation 
 #----------------------------------------------------------
 resource "local_sensitive_file" "root_password" {
-  count    = var.set_root_password ? 1 : 0
-  content  = random_password.root_password.result
-  filename = "${var.ssh_private_key_path}/${var.vm_name}_root_password.txt"
+  count           = var.set_root_password ? 1 : 0
+  content         = random_password.root_password.result
+  filename        = "${var.ssh_private_key_path}/${var.vm_name}_root_password.txt"
   file_permission = "0600"
 }
 
 resource "local_sensitive_file" "user_password" {
-  count    = var.set_user_password ? 1 : 0
-  content  = random_password.user_password.result
-  filename = "${var.ssh_private_key_path}/${var.vm_name}_user_password.txt"
+  count           = var.set_user_password ? 1 : 0
+  content         = random_password.user_password.result
+  filename        = "${var.ssh_private_key_path}/${var.vm_name}_user_password.txt"
   file_permission = "0600"
 }
 
 resource "local_sensitive_file" "ssh_private_key" {
-  count    = var.generate_ssh_key ? 1 : 0
-  content  = tls_private_key.ssh_key.private_key_pem
-  filename = "${var.ssh_private_key_path}/${var.vm_name}_id_rsa"
+  count           = var.generate_ssh_key ? 1 : 0
+  content         = tls_private_key.ssh_key.private_key_pem
+  filename        = "${var.ssh_private_key_path}/${var.vm_name}_id_rsa"
   file_permission = "0600"
 }
 
 resource "local_sensitive_file" "ssh_public_key" {
-  count    = var.generate_ssh_key ? 1 : 0
-  content  = tls_private_key.ssh_key.public_key_openssh
-  filename = "${var.ssh_private_key_path}/${var.vm_name}_id_rsa.pub"
+  count           = var.generate_ssh_key ? 1 : 0
+  content         = tls_private_key.ssh_key.public_key_openssh
+  filename        = "${var.ssh_private_key_path}/${var.vm_name}_id_rsa.pub"
   file_permission = "0644"
 }
 
@@ -116,7 +116,7 @@ resource "local_sensitive_file" "ssh_public_key" {
 # Create a libvirt volume for the base image
 #----------------------------------------------------------
 resource "libvirt_volume" "base_image" {
-  count = module.cloud_images.os.available ? 1 : 0
+  count  = module.cloud_images.os.available ? 1 : 0
   name   = "${var.vm_name}-base.qcow2"
   pool   = var.storage_pool
   source = module.cloud_images.os.url
@@ -127,13 +127,13 @@ resource "libvirt_volume" "base_image" {
 # Create a copy-on-write volume for the VM
 #----------------------------------------------------------
 resource "libvirt_volume" "vm_disk" {
-  count          = var.vm_disk
-  name           = "${var.vm_name}.qcow2"
-  base_volume_id = libvirt_volume.base_image.id
+  count            = var.vm_disk
+  name             = "${var.vm_name}.qcow2"
+  base_volume_id   = libvirt_volume.base_image.id
   base_volume_name = libvirt_volume.base_image.name
-  pool           = var.storage_pool
-  format         = "qcow2"
-  size           = 1024 * 1024 * 1024 * var.disk_size
+  pool             = var.storage_pool
+  format           = "qcow2"
+  size             = 1024 * 1024 * 1024 * var.disk_size
 }
 
 #----------------------------------------------------------
@@ -143,23 +143,23 @@ data "template_file" "user_data" {
   template = file("${path.root}/templates/cloud-init/user_data.tpl")
 
   vars = {
-    timezone = var.timezone
-    enable_ssh_password = var.enable_ssh_password
-    disable_ssh_root_login = var.disable_ssh_root_login
+    timezone                = var.timezone
+    enable_ssh_password     = var.enable_ssh_password
+    disable_ssh_root_login  = var.disable_ssh_root_login
     lock_root_user_password = var.lock_root_user_password
-    set_root_password = var.set_root_password
-    root_password = local.root_password_hash
-    ssh_user_name = var.ssh_user_name
-    ssh_user_fullname = var.ssh_user_fullname
-    ssh_user_shell = var.ssh_user_shell
-    ssh_user_password = local.user_password_hash
-    set_ssh_user_password = var.set_user_password
-    ssh_authorized_keys = local.combined_ssh_keys
-    packages = var.packages
-    runcmds = var.runcmds
-    disable_ipv6 = var.disable_ipv6
-    package_update = var.package_update
-    package_upgrade = var.package_upgrade
+    set_root_password       = var.set_root_password
+    root_password           = local.root_password_hash
+    ssh_user_name           = var.ssh_user_name
+    ssh_user_fullname       = var.ssh_user_fullname
+    ssh_user_shell          = var.ssh_user_shell
+    ssh_user_password       = local.user_password_hash
+    set_ssh_user_password   = var.set_user_password
+    ssh_authorized_keys     = local.combined_ssh_keys
+    packages                = var.packages
+    runcmds                 = var.runcmds
+    disable_ipv6            = var.disable_ipv6
+    package_update          = var.package_update
+    package_upgrade         = var.package_upgrade
   }
 }
 
@@ -169,7 +169,7 @@ data "template_file" "network_config" {
   vars = {
     ip_address = var.ip_address
     gateway    = var.ip_gateway
-    nic      = var.network_interface
+    nic        = var.network_interface
     dns        = var.dns_servers
   }
 }
@@ -178,7 +178,7 @@ data "template_file" "meta_data" {
   template = file("${path.root}/templates/cloud-init/meta_data.tpl")
 
   vars = {
-    instance_id = var.vm_name
+    instance_id    = var.vm_name
     local_hostname = var.vm_name
   }
 }
@@ -195,17 +195,17 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 # Create the Virtual Machine
 #----------------------------------------------------------
 resource "libvirt_domain" "vm" {
-  count = var.vm_count
-  name   = var.vm_name
-  memory = var.memory
-  cpu_mode = var.cpu_mode
-  vcpu   = var.vcpu
+  count      = var.vm_count
+  name       = var.vm_name
+  memory     = var.memory
+  cpu_mode   = var.cpu_mode
+  vcpu       = var.vcpu
   austostart = var.autostart_vm
   qemu_agent = true
-  cloudinit = libvirt_cloudinit_disk.commoninit.id
+  cloudinit  = libvirt_cloudinit_disk.commoninit.id
 
   network_interface {
-    network_name = var.network_name 
+    network_name   = var.network_name
     wait_for_lease = true
   }
 
