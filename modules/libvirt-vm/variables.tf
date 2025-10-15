@@ -189,10 +189,9 @@ variable "runcmds" {
   description = "Extra commands to be run with cloud init"
   type        = list(string)
   default = [
-    "[ systemctl, daemon-reload ]",
-    "[ systemctl, enable, qemu-guest-agent ]",
-    "[ systemctl, start, qemu-guest-agent ]",
-    "[ systemctl, restart, systemd-networkd ]"
+    "systemctl daemon-reload",
+    "systemctl enable --now qemu-guest-agent",
+    "systemctl restart systemd-networkd"
   ]
 }
 
