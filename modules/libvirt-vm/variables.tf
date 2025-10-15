@@ -185,6 +185,17 @@ variable "packages" {
   ]
 }
 
+variable "runcmds" {
+  description = "Extra commands to be run with cloud init"
+  type        = list(string)
+  default = [
+    "[ systemctl, daemon-reload ]",
+    "[ systemctl, enable, qemu-guest-agent ]",
+    "[ systemctl, start, qemu-guest-agent ]",
+    "[ systemctl, restart, systemd-networkd ]"
+  ]
+}
+
 variable "disable_ipv6" {
   description = "Whether to disable IPv6 on the VM"
   type        = bool
@@ -257,4 +268,3 @@ variable "autostart_vm" {
   type        = bool
   default     = true
 }
-
