@@ -1,8 +1,6 @@
-##########################################
-# terraform-libvirt: VM Module
-# Purpose: Provision virtual machines on KVM/QEMU
-# Provider: terraform-provider-libvirt
-##########################################
+# ----------------------------------------------------------
+# Terraform and Provider Configuration
+#----------------------------------------------------------
 terraform {
   required_providers {
     libvirt = {
@@ -19,10 +17,9 @@ provider "libvirt" {
 # Cloud Images module reference
 #----------------------------------------------------------
 module "cloud_images" {
-  source     = "../cloud-images"
-  version    = var.os_version
-  os_name    = var.os_name
-  os_version = var.os_version
+  source  = "../cloud-images"
+  name    = var.os_name
+  version = var.os_version
 }
 
 #----------------------------------------------------------
@@ -51,7 +48,7 @@ resource "libvirt_network" "vm_network" {
 resource "libvirt_pool" "storage_pool" {
   count     = var.create_storage_pool ? 1 : 0
   name      = var.storage_pool_name
-  type      = var.pool_type_type
+  type      = var.storage_pool_type
   autostart = true
   target {
     path = var.storage_pool_path
@@ -87,28 +84,28 @@ resource "tls_private_key" "ssh_key" {
 resource "local_sensitive_file" "root_password" {
   count           = var.set_root_password ? 1 : 0
   content         = random_password.root_password.result
-  filename        = "${var.ssh_private_key_path}/${var.vm_name}_root_password.txt"
+  filename        = "${path.cwd}/root_password.txt"
   file_permission = "0600"
 }
 
 resource "local_sensitive_file" "user_password" {
   count           = var.set_user_password ? 1 : 0
   content         = random_password.user_password.result
-  filename        = "${var.ssh_private_key_path}/${var.vm_name}_user_password.txt"
+  filename        = "${path.cwd}/user_password.txt"
   file_permission = "0600"
 }
 
 resource "local_sensitive_file" "ssh_private_key" {
   count           = var.generate_ssh_key ? 1 : 0
   content         = tls_private_key.ssh_key.private_key_pem
-  filename        = "${var.ssh_private_key_path}/${var.vm_name}_id_rsa"
+  filename        = "${path.cwd}/id_rsa.key"
   file_permission = "0600"
 }
 
 resource "local_sensitive_file" "ssh_public_key" {
   count           = var.generate_ssh_key ? 1 : 0
   content         = tls_private_key.ssh_key.public_key_openssh
-  filename        = "${var.ssh_private_key_path}/${var.vm_name}_id_rsa.pub"
+  filename        = "${path.cwd}/id_rsa.pub"
   file_permission = "0644"
 }
 
@@ -127,7 +124,7 @@ resource "libvirt_volume" "base_image" {
 # Create a copy-on-write volume for the VM
 #----------------------------------------------------------
 resource "libvirt_volume" "vm_disk" {
-  count            = var.vm_disk
+  count            = var.vm_count
   name             = "${var.vm_name}.qcow2"
   base_volume_id   = libvirt_volume.base_image.id
   base_volume_name = libvirt_volume.base_image.name
@@ -143,23 +140,23 @@ data "template_file" "user_data" {
   template = file("${path.root}/templates/cloud-init/user_data.tpl")
 
   vars = {
-    timezone                = var.timezone
-    enable_ssh_password     = var.enable_ssh_password
-    disable_ssh_root_login  = var.disable_ssh_root_login
-    lock_root_user_password = var.lock_root_user_password
-    set_root_password       = var.set_root_password
-    root_password           = local.root_password_hash
-    ssh_user_name           = var.ssh_user_name
-    ssh_user_fullname       = var.ssh_user_fullname
-    ssh_user_shell          = var.ssh_user_shell
-    ssh_user_password       = local.user_password_hash
-    set_ssh_user_password   = var.set_user_password
-    ssh_authorized_keys     = local.combined_ssh_keys
-    packages                = var.packages
-    runcmds                 = var.runcmds
-    disable_ipv6            = var.disable_ipv6
-    package_update          = var.package_update
-    package_upgrade         = var.package_upgrade
+    timezone                 = var.timezone
+    enable_ssh_password_auth = var.enable_ssh_password_auth
+    disable_ssh_root_login   = var.disable_ssh_root_login
+    lock_root_user_password  = var.lock_root_user_password
+    set_root_password        = var.set_root_password
+    root_password            = local.root_password_hash
+    ssh_user_name            = var.user_name
+    ssh_user_fullname        = var.ssh_user_fullname
+    ssh_user_shell           = var.ssh_user_shell
+    ssh_user_password        = local.user_password_hash
+    set_ssh_user_password    = var.set_user_password
+    ssh_authorized_keys      = local.combined_ssh_keys
+    packages                 = var.packages
+    runcmds                  = var.runcmds
+    disable_ipv6             = var.disable_ipv6
+    package_update           = var.package_update
+    package_upgrade          = var.package_upgrade
   }
 }
 
