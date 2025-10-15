@@ -122,21 +122,24 @@ resource "libvirt_volume" "vm_disk" {
 # Generate Cloud-Init ISO
 #----------------------------------------------------------
 data "template_file" "user_data" {
-  template = file("${path.root}/templates/cloud-init/user_data.tpl")
+  template = file("${path.root}/templates/cloud-init/user_data.yaml.tpl")
 
   vars = {
     timezone                 = var.timezone
+    manage_etc_hosts         = var.manage_etc_hosts
+    preserve_hostname        = var.preserve_hostname
     enable_ssh_password_auth = var.enable_ssh_password_auth
     disable_ssh_root_login   = var.disable_ssh_root_login
     lock_root_user_password  = var.lock_root_user_password
     set_root_password        = var.set_root_password
     root_password            = local.root_password_hash
-    ssh_user_name            = var.user_name
-    ssh_user_fullname        = var.ssh_user_fullname
-    ssh_user_shell           = var.ssh_user_shell
-    ssh_user_password        = local.user_password_hash
-    set_ssh_user_password    = var.set_user_password
-    ssh_authorized_keys      = local.combined_ssh_keys
+    user_name                = var.user_name
+    user_fullname            = var.ssh_user_fullname
+    user_shell               = var.ssh_user_shell
+    user_password            = local.user_password_hash
+    set_user_password        = var.set_user_password
+    lock_user_password       = var.lock_user_password
+    authorized_keys          = local.combined_ssh_keys
     disable_ipv6             = var.disable_ipv6
     package_update           = var.package_update
     package_upgrade          = var.package_upgrade
@@ -149,10 +152,11 @@ data "template_file" "network_config" {
   template = file("${path.root}/templates/cloud-init/network_config.tpl")
 
   vars = {
-    ip_address = var.ip_address
-    gateway    = var.ip_gateway
-    nic        = var.network_interface
-    dns        = join(" ", var.dns_servers)
+    ip_address  = var.ip_address
+    gateway     = var.ip_gateway
+    nic         = var.network_interface
+    enable_dhcp = var.enable_dhcp
+    dns         = join(" ", var.dns_servers)
   }
 }
 

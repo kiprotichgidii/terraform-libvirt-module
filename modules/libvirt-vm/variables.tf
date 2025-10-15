@@ -160,6 +160,12 @@ variable "lock_root_user_password" {
   default     = false
 }
 
+variable "lock_user_password" {
+  description = "Whether to lock the default user password"
+  type        = bool
+  default     = false
+}
+
 variable "ssh_user_fullname" {
   description = "Full name for the default user"
   type        = string
@@ -170,6 +176,18 @@ variable "ssh_user_shell" {
   description = "Login shell for the default user"
   type        = string
   default     = "/bin/bash"
+}
+
+variable "manage_etc_hosts" {
+  description = "Whether to manage /etc/hosts file"
+  type        = bool
+  default     = true
+}
+
+variable "preserve_hostname" {
+  description = "Whether to preserve the hostname"
+  type        = bool
+  default     = true
 }
 
 variable "packages" {
