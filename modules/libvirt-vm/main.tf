@@ -2,7 +2,7 @@
 # Cloud Images module reference
 #----------------------------------------------------------
 module "cloud_images" {
-  source  = "../cloud-images"
+  source     = "../cloud-images"
   os_name    = var.os_name
   os_version = var.os_version
 }
@@ -137,11 +137,11 @@ data "template_file" "user_data" {
     ssh_user_password        = local.user_password_hash
     set_ssh_user_password    = var.set_user_password
     ssh_authorized_keys      = local.combined_ssh_keys
-    packages                 = var.packages
-    runcmds                  = var.runcmds
     disable_ipv6             = var.disable_ipv6
     package_update           = var.package_update
     package_upgrade          = var.package_upgrade
+    packages                 = var.packages
+    runcmds                  = var.runcmds
   }
 }
 

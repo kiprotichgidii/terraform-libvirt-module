@@ -185,16 +185,6 @@ variable "packages" {
   ]
 }
 
-variable "runcmds" {
-  description = "List of commands to run on first boot"
-  type        = list(string)
-  default = [
-    "[systemctl, daemon-reload]",
-    "[systemctl, enable, --now, qemu-guest-agent]",
-    "[systemctl, restart, systemd-networkd]"
-  ]
-}
-
 variable "disable_ipv6" {
   description = "Whether to disable IPv6 on the VM"
   type        = bool
@@ -223,7 +213,7 @@ variable "ip_gateway" {
   description = "Gateway IP address for the VM (required if static IP is set)"
   type        = string
   default     = "172.20.0.1"
-} 
+}
 
 variable "network_interface" {
   description = "Network interface to use for the VM (e.g., eth0)"

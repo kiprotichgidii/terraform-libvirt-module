@@ -5,5 +5,5 @@ locals {
 
   # SSH connection
   generated_ssh_key = var.generate_ssh_key ? [trimspace(tls_private_key.ssh_key[0].public_key_openssh)] : []
-  combined_ssh_keys  = concat(var.ssh_keys, local.generated_ssh_key)
+  combined_ssh_keys = concat(var.ssh_keys, local.generated_ssh_key)
 }
