@@ -140,8 +140,8 @@ data "template_file" "user_data" {
     disable_ipv6             = var.disable_ipv6
     package_update           = var.package_update
     package_upgrade          = var.package_upgrade
-    packages                 = var.packages
-    runcmds                  = var.runcmds
+    packages                 = join(" ", var.packages)
+    runcmds                  = join(" ", var.runcmds)
   }
 }
 
@@ -152,7 +152,7 @@ data "template_file" "network_config" {
     ip_address = var.ip_address
     gateway    = var.ip_gateway
     nic        = var.network_interface
-    dns        = var.dns_servers
+    dns        = join(" ", var.dns_servers)
   }
 }
 
