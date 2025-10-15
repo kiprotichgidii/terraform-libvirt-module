@@ -1,3 +1,4 @@
+#cloud-config
 version: 2
 ethernets:
   ${nic}:
