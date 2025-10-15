@@ -1,25 +1,10 @@
 # ----------------------------------------------------------
-# Terraform and Provider Configuration
-#----------------------------------------------------------
-terraform {
-  required_providers {
-    libvirt = {
-      source  = "dmacvicar/libvirt"
-      version = "0.7.0"
-    }
-  }
-}
-provider "libvirt" {
-  uri = var.libvirt_uri
-}
-
-# ----------------------------------------------------------
 # Cloud Images module reference
 #----------------------------------------------------------
 module "cloud_images" {
   source  = "../cloud-images"
-  name    = var.os_name
-  version = var.os_version
+  os_name    = var.os_name
+  os_version = var.os_version
 }
 
 #----------------------------------------------------------
@@ -191,7 +176,7 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 #----------------------------------------------------------
 # Create the Virtual Machine
 #----------------------------------------------------------
-resource "libvirt_domain" "vm" {
+resource "libvirt_domain" "vm_domain" {
   count      = var.vm_count
   name       = var.vm_name
   memory     = var.memory

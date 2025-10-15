@@ -62,7 +62,7 @@ variable "enable_dhcp" {
 variable "dhcp_range_start" {
   description = "Start of DHCP range (only for bridge mode with DHCP enabled)"
   type        = string
-  default     = "172.20.0.1"
+  default     = "172.20.0.2"
 }
 
 variable "dhcp_range_end" {
@@ -113,6 +113,12 @@ variable "user_name" {
   description = "Username for the default user to create"
   type        = string
   default     = "cloud-user"
+}
+
+variable "ssh_keys" {
+  description = "List of SSH public keys to add to the default user"
+  type        = list(string)
+  default     = []
 }
 
 # Files Creation Variables
@@ -183,9 +189,9 @@ variable "runcmds" {
   description = "List of commands to run on first boot"
   type        = list(string)
   default = [
-    ["systemctl", "daemon-reload"],
-    ["systemctl", "enable", "--now", "qemu-guest-agent"],
-    ["systemctl", "restart", "systemd-networkd"]
+    "[systemctl, daemon-reload]",
+    "[systemctl, enable, --now, qemu-guest-agent]",
+    "[systemctl, restart, systemd-networkd]"
   ]
 }
 
@@ -205,6 +211,30 @@ variable "package_upgrade" {
   description = "Whether to upgrade packages on first boot"
   type        = bool
   default     = true
+}
+
+variable "ip_address" {
+  description = "Static IP address for the VM (if empty, DHCP is used)"
+  type        = string
+  default     = "172.20.0.10/24"
+}
+
+variable "ip_gateway" {
+  description = "Gateway IP address for the VM (required if static IP is set)"
+  type        = string
+  default     = "172.20.0.1"
+} 
+
+variable "network_interface" {
+  description = "Network interface to use for the VM (e.g., eth0)"
+  type        = string
+  default     = "eth0"
+}
+
+variable "dns_servers" {
+  description = "List of DNS servers for the VM"
+  type        = list(string)
+  default     = ["8.8.8.8", "8.8.4.4"]
 }
 
 # Virtual Machine Variables
