@@ -4,7 +4,7 @@ ethernets:
   ${nic}:
     dhcp4: ${enable_dhcp}
 %{ if !enable_dhcp }
-    addresses: [${ip_address}/24]
+    addresses: [${ip_address}]
     gateway4: ${gateway}
     nameservers:
       addresses: [${dns}]

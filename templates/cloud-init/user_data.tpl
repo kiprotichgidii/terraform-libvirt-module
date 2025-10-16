@@ -11,15 +11,14 @@ disable_root: ${disable_ssh_root_login}
 # User Management
 users:
   - name: ${user_name}
-    gecos: ${user_name}
+    gecos: ${user_fullname}
     sudo: ALL=(ALL) NOPASSWD:ALL
     lock_passwd: ${lock_user_password}
     shell: ${user_shell}
     ssh_authorized_keys:
-    %{~ for ssh_key in authorized_keys ~}
+      %{~ for ssh_key in authorized_keys ~}
       - ${ssh_key}
-    %{~ endfor ~}
-    ssh_pwauth: ${enable_ssh_password_auth}
+      %{~ endfor ~}
     groups: sudo
     home: /home/${user_name}
     manage_home: true
@@ -28,20 +27,20 @@ users:
     lock_passwd: ${lock_root_user_password}
     shell: /bin/bash
     ssh_authorized_keys:
-    %{~ for ssh_key in authorized_keys ~}
-      - ${ssh_key}
-    %{~ endfor ~}
+      %{~ for ssh_key in authorized_keys ~}
+        - ${ssh_key}
+      %{~ endfor ~}
 
 # Set User Password
 chpasswd:
   expire: False
   users:
-  %{~ if set_user_password ~}
-  - {name: ${user_name}, password: ${user_password}}
-  %{~ endif ~}
-  %{~ if set_root_password ~}
-  - {name: root, password: ${root_password}}
-  %{~ endif ~}
+    %{~ if set_user_password ~}
+    - {name: ${user_name}, password: ${user_password}, type: "crypted"}
+    %{~ endif ~}
+    %{~ if set_root_password ~}
+    - {name: root, password: ${root_password}, type: "crypted"}
+    %{~ endif ~}
 
 # Grow the root partition to fill the disk
 growpart:
@@ -53,14 +52,14 @@ resize_rootfs: true
 package_update: ${package_update}
 package_upgrade: ${package_upgrade}
 packages:
-  %{~ for package in packages.split(" ") ~}  
+  %{~ for package in packages.split("||") ~}  
     - ${package}
   %{~ endfor ~}
 
 # First Boot Commands
 %{~ if runcmds != "" ~}
 runcmd:
-  %{~ for cmd in runcmds.split(" ") ~}
+  %{~ for cmd in runcmds.split("||") ~}
     - ${cmd}
   %{~ endfor ~}
 %{~ endif ~}
