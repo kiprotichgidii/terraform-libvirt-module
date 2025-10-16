@@ -143,8 +143,8 @@ data "template_file" "user_data" {
     disable_ipv6             = var.disable_ipv6
     package_update           = var.package_update
     package_upgrade          = var.package_upgrade
-    packages                 = join(" ", var.packages)
-    runcmds                  = join(" ", var.runcmds)
+    packages                 = join("||", var.packages)
+    runcmds                  = join("||", var.runcmds)
   }
 }
 
