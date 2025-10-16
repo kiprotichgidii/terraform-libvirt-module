@@ -48,13 +48,21 @@ growpart:
   devices: ['/']
 resize_rootfs: true
 
-# Install Specified Packages
+# Update and Upgrade Packages
+%{~ if package_update ~}
 package_update: ${package_update}
+%{~ endif ~}
+%{~ if package_upgrade ~}
 package_upgrade: ${package_upgrade}
+%{~ endif ~}
+
+# Install Additional Packages
+%{~ if packages == "" ~}
 packages:
   %{~ for package in packages ~}  
     - ${package}
   %{~ endfor ~}
+%{~ endif ~}
 
 # First Boot Commands
 %{~ if runcmds != "" ~}
