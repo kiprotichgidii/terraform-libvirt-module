@@ -52,14 +52,14 @@ resize_rootfs: true
 package_update: ${package_update}
 package_upgrade: ${package_upgrade}
 packages:
-  %{~ for package in packages.split("||") ~}  
+  %{~ for package in packages ~}  
     - ${package}
   %{~ endfor ~}
 
 # First Boot Commands
 %{~ if runcmds != "" ~}
 runcmd:
-  %{~ for cmd in runcmds.split("||") ~}
+  %{~ for cmd in runcmds ~}
     - ${cmd}
   %{~ endfor ~}
 %{~ endif ~}
