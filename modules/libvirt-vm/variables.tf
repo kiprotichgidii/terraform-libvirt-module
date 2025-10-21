@@ -2,7 +2,7 @@
 variable "livirt_uri" {
   description = "KVM Host connection URI"
   type        = string
-  default     = "qemu+ssh://root@192.168.1.100/system"
+  default     = "qemu:///system"
 }
 
 # Cloud Images Module Variables
@@ -284,4 +284,10 @@ variable "autostart_vm" {
   description = "Whether the VM should autostart on host boot"
   type        = bool
   default     = true
+}
+
+variable "disk_size" {
+  description = "Disk size for the VM in GB"
+  type        = number
+  default     = 20
 }
