@@ -59,17 +59,6 @@ variable "enable_dhcp" {
   type        = bool
   default     = true
 }
-variable "dhcp_range_start" {
-  description = "Start of DHCP range (only for bridge mode with DHCP enabled)"
-  type        = string
-  default     = "172.20.0.2"
-}
-
-variable "dhcp_range_end" {
-  description = "End of DHCP range (only for bridge mode with DHCP enabled)"
-  type        = string
-  default     = "172.20.0.254"
-}
 
 # Storage Pool Variables
 variable "create_storage_pool" {

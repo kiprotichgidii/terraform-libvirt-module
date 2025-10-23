@@ -32,12 +32,13 @@ module "libvirt_vm" {
   # VM parameters
   os_name    = "ubuntu"
   os_version = "24.04"
-  vm_name   = "Ubuntu"
-  vm_count  = 1
-  memory    = 2048
-  vcpu      = 2
-  disk_size = 20
-  timezone = "Africa/Nairobi"
+  vm_name    = "Ubuntu"
+  vm_count   = 1
+  memory     = 2048
+  vcpu       = 2
+  disk_size  = 20
+  timezone   = "Africa/Nairobi"
+  ip_address = ""
 }
 
 output "ssh_username" {
