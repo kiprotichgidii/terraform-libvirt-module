@@ -280,3 +280,9 @@ variable "disk_size" {
   type        = number
   default     = 20
 }
+
+variable "graphics_listen_address" {
+  description = "The address graphics should listen on"
+  type        = string
+  default     = "127.0.0.1"
+}

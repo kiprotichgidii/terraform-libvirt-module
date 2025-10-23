@@ -199,6 +199,7 @@ resource "libvirt_domain" "vm_domain" {
   graphics {
     type        = "vnc"
     listen_type = "address"
+    listen_address = var.graphics_listen_address
     autoport    = true
   }
 

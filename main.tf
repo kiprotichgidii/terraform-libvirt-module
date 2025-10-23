@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "libvirt" {
-  uri = "qemu+ssh://root@192.168.1.20/system"
+  uri = "qemu+ssh://tofu@192.168.1.20/system?sshauth=privkey&keyfile=~/.ssh/id_ecdsa&no_verify=1"
 }
 
 module "libvirt_vm" {
@@ -37,6 +37,7 @@ module "libvirt_vm" {
   memory     = 2048
   vcpu       = 2
   disk_size  = 20
+  graphics_listen_address = "0.0.0.0"
   timezone   = "Africa/Nairobi"
   ip_address = ""
 }
