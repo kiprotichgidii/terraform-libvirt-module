@@ -1,6 +1,6 @@
-# Terraform Libvirt Module
+# Terraform/OpenTofu Libvirt Module
 
-This Terraform module uses the `libvirt` provider to create virtual machines (VMs), manage disks, and network interfaces. It also manages storage pools for the VMs. The module is designed to be flexible, allowing you to create one or more VM instances, attach multiple disks and network interfaces, and manage your storage pools.
+This Terraform/OpenTofu module uses the `libvirt` provider to create virtual machines (VMs), manage disks, and network interfaces. It also manages storage pools for the VMs. The module is designed to be flexible, allowing you to create one or more VM instances, attach multiple disks and network interfaces, and manage your storage pools.
 
 ## Features
 
