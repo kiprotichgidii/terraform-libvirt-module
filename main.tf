@@ -14,7 +14,8 @@ provider "libvirt" {
 }
 
 module "libvirt_vm" {
-  source = "./modules/libvirt-vm"
+ source = "./modules/libvirt-vm"
+ # source = "git::https://github.com/kiprotichgidii/terraform-libvirt-module.git//modules/libvirt-vm?ref=main"
 
   # Network parameters
   create_network    = true
@@ -30,16 +31,16 @@ module "libvirt_vm" {
   storage_pool_path   = "/var/lib/libvirt/images/"
 
   # VM parameters
-  os_name    = "ubuntu"
-  os_version = "24.04"
-  vm_name    = "Ubuntu"
-  vm_count   = 1
-  memory     = 2048
-  vcpu       = 2
-  disk_size  = 20
+  os_name                 = "ubuntu"
+  os_version              = "24.04"
+  vm_name                 = "Ubuntu"
+  vm_count                = 1
+  memory                  = 2048
+  vcpu                    = 2
+  disk_size               = 20
   graphics_listen_address = "0.0.0.0"
-  timezone   = "Africa/Nairobi"
-  ip_address = ""
+  timezone                = "Africa/Nairobi"
+  ip_address              = ""
 }
 
 output "ssh_username" {
