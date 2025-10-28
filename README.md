@@ -16,30 +16,7 @@ This Terraform/OpenTofu module uses the `libvirt` provider to create virtual mac
 - A running instance of `libvirtd`
 
 ## How to Use
-1. Install Terraform and libvirt.
-
-2. Clone this repository and navigate to the terraform directory.
-```bash
-$ git clone https://github.com/giddy624/terraform-libvirt-module.git
-```
-3. Navigate to `terraform-libvirt/terraform/examples/` then modify the main.tf file according to your environment.
-```bash
-$ cd terraform-libvirt/terraform/examples/main.tf
-```
-4. Initialize Terraform with:
-```bash
-$ terraform init
-``` 
-5. Run terraform plan.
-```bash
-$ terraform plan
-```
-6. Apply the configuration to create the VMs:
-```bash
-$ terraform apply
-```
-
-7. Confirm the resources to be created and monitor the output for the VMs and their IP addresses.
+1. Install Terraform and libvirt, then specify the resources to be created in your main.tf file:
 
 ### Example 1: Basic Usage with main.tf
 ```hcl
@@ -98,6 +75,19 @@ output "vm_ip_addresses" {
 output "ssh_commands" {
   value = module.libvirt_vm.ssh_commands
 }
+```
+
+2. Initialize Terraform with:
+```bash
+$ terraform init
+``` 
+3. Run terraform plan.
+```bash
+$ terraform plan
+```
+4. Apply the configuration to create the VMs:
+```bash
+$ terraform apply
 ```
 
 ### Inputs
