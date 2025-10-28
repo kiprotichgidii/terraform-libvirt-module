@@ -16,9 +16,10 @@ This Terraform/OpenTofu module uses the `libvirt` provider to create virtual mac
 - A running instance of `libvirtd`
 
 ## How to Use
-1. Install Terraform and libvirt, then specify the resources to be created in your main.tf file:
+Install Terraform and libvirt, then specify the resources to be created in your `main.tf` file:
 
-### Example 1: Basic Usage with main.tf
+**Example `main.tf`:**
+
 ```hcl
 # Libvirt Provider URI
 terraform {
@@ -77,15 +78,15 @@ output "ssh_commands" {
 }
 ```
 
-2. Initialize Terraform with:
+Initialize Terraform with:
 ```bash
 $ terraform init
 ``` 
-3. Run terraform plan.
+Run terraform plan:
 ```bash
 $ terraform plan
 ```
-4. Apply the configuration to create the VMs:
+Apply the configuration to create the VMs:
 ```bash
 $ terraform apply
 ```
