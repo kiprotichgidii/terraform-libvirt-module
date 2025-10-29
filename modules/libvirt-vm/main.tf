@@ -97,10 +97,10 @@ resource "local_sensitive_file" "ssh_public_key" {
 # Create a libvirt volume for the base image
 #----------------------------------------------------------
 resource "libvirt_volume" "base_image" {
-  count  = module.cloud_images.available ? 1 : 0
+  count  = var.local_image_path != "" || module.cloud_images.available ? 1 : 0
   name   = "${var.vm_name}-base.qcow2"
   pool   = var.create_storage_pool ? libvirt_pool.storage_pool[0].name : var.storage_pool_name
-  source = module.cloud_images.url
+  source = var.local_image_path != "" ? var.local_image_path : module.cloud_images.url 
   format = "qcow2"
 }
 

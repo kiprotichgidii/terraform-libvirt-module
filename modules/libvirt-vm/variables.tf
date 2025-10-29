@@ -17,6 +17,12 @@ variable "os_version" {
   default     = "latest"
 }
 
+variable "local_image_path" {
+  description = "Path to local image file. If not specified, cloud image will be used"
+  type        = string
+  default     = ""
+}
+
 # Network Variables
 variable "create_network" {
   description = "Whether to create a new libvirt network"
