@@ -1,12 +1,12 @@
 # Outputs for the network resource
 output "network_id" {
   description = "ID of the libvirt network"
-  value       = try(libvirt_network.network[0].id, "N/A")
+  value       = try(libvirt_network.vm_network[0].id, "N/A")
 }
 
 output "network_name" {
   description = "Name of the libvirt network"
-  value       = try(libvirt_network.network[0].name, "N/A")
+  value       = try(libvirt_network.vm_network[0].name, "N/A")
 }
 
 # Outputs for the storage pool

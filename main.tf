@@ -14,8 +14,8 @@ provider "libvirt" {
 }
 
 module "libvirt_vm" {
-  # source = "./modules/libvirt-vm"
-  source = "git::https://github.com/kiprotichgidii/terraform-libvirt-module.git//modules/libvirt-vm?ref=main"
+  source = "./modules/libvirt-vm"
+  #source = "git::https://github.com/kiprotichgidii/terraform-libvirt-module.git//modules/libvirt-vm?ref=main"
 
   # Network parameters
   create_network    = true
