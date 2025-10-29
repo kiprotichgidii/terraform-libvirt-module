@@ -15,7 +15,7 @@ provider "libvirt" {
 
 module "libvirt_vm" {
   source = "./modules/libvirt-vm"
-  #source = "git::https://github.com/kiprotichgidii/terraform-libvirt-module.git//modules/libvirt-vm?ref=main"
+  # source = "git::https://github.com/kiprotichgidii/terraform-libvirt-module.git//modules/libvirt-vm?ref=main"
 
   # Network parameters
   create_network    = true
@@ -42,6 +42,14 @@ module "libvirt_vm" {
   graphics_listen_address = "0.0.0.0"
   timezone                = "Africa/Nairobi"
   ip_address              = ""
+}
+
+output "network_name" {
+  value = module.libvirt_vm.network_name
+}
+
+output "storage_pool_name" {
+  value = module.libvirt_vm.pool_name
 }
 
 output "ssh_username" {
