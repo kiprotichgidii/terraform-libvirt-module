@@ -1,4 +1,26 @@
-# Outputs for the libvirt VM module
+# Outputs for the network resource
+output "network_id" {
+  description = "ID of the libvirt network"
+  value       = try(libvirt_network.network[0].id, "N/A")
+}
+
+output "network_name" {
+  description = "Name of the libvirt network"
+  value       = try(libvirt_network.network[0].name, "N/A")
+}
+
+# Outputs for the storage pool
+output "pool_id" {
+  description = "ID of the libvirt storage pool"
+  value       = try(libvirt_pool.storage_pool[0].id, "N/A")
+}
+
+output "pool_name" {
+  description = "Name of the libvirt storage pool"
+  value       = try(libvirt_pool.storage_pool[0].name, "N/A")
+}
+
+# Outputs for the libvirt VM
 output "ssh_user_name" {
   description = "The SSH username for the VM"
   value       = var.user_name
