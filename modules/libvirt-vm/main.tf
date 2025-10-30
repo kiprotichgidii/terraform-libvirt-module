@@ -51,7 +51,7 @@ resource "random_password" "root_password" {
 
 resource "random_password" "user_password" {
   count            = var.set_user_password ? 1 : 0
-  length           = 5
+  length           = 16
   special          = true
   override_special = "_%@"
 }
