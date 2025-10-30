@@ -111,7 +111,7 @@ resource "libvirt_volume" "vm_disk" {
   count            = var.vm_count
   name             = "${var.vm_name}.qcow2"
   base_volume_id   = libvirt_volume.base_image[count.index].id
-  base_volume_name = libvirt_volume.base_image[count.index].name
+  #base_volume_name = libvirt_volume.base_image[count.index].name
   pool             = var.create_storage_pool ? libvirt_pool.storage_pool[0].name : var.storage_pool_name
   format           = "qcow2"
   size             = 1024 * 1024 * 1024 * var.disk_size
