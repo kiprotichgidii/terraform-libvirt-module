@@ -51,7 +51,7 @@ variable "autostart_network" {
 variable "network_cidr" {
   description = "CIDR for the network (applicable for nat and routed modes)"
   type        = list(string)
-  default     = ["172.20.0.0/24"]
+  default     = ["192.168.0.0/24"]
 }
 
 variable "network_mtu" {

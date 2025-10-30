@@ -21,10 +21,10 @@ module "libvirt_vm" {
 
   # Network parameters
   create_network    = true
-  network_name      = "default_01"
+  network_name      = "opentofu"
   network_mode      = "nat"
   autostart_network = true
-  network_cidr      = ["172.20.0.0/24"]
+  network_cidr      = ["192.168.0.0/24"]
 
   # Storage Pool parameters
   create_storage_pool = true
