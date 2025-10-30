@@ -33,7 +33,7 @@ variable "create_network" {
 variable "network_name" {
   description = "Name of the libvirt network"
   type        = string
-  default     = "default_01"
+  default     = "default"
 }
 
 variable "network_mode" {
