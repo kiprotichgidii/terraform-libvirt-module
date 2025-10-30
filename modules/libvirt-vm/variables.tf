@@ -27,7 +27,7 @@ variable "local_image_path" {
 variable "create_network" {
   description = "Whether to create a new libvirt network"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "network_name" {
