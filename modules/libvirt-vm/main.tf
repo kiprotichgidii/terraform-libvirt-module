@@ -121,7 +121,7 @@ resource "libvirt_volume" "vm_disk" {
 # Generate Cloud-Init ISO
 #----------------------------------------------------------
 data "template_file" "user_data" {
-  template = file("${path.root}/templates/cloud-init/user_data.tpl")
+  template = file("${path.module}/templates/cloud-init/user_data.tpl")
 
   vars = {
     timezone                 = var.timezone
@@ -148,7 +148,7 @@ data "template_file" "user_data" {
 }
 
 data "template_file" "network_config" {
-  template = file("${path.root}/templates/cloud-init/network_config.tpl")
+  template = file("${path.module}/templates/cloud-init/network_config.tpl")
 
   vars = {
     ip_address  = var.ip_address
@@ -160,7 +160,7 @@ data "template_file" "network_config" {
 }
 
 data "template_file" "meta_data" {
-  template = file("${path.root}/templates/cloud-init/meta_data.tpl")
+  template = file("${path.module}/templates/cloud-init/meta_data.tpl")
 
   vars = {
     instance_id = var.vm_name

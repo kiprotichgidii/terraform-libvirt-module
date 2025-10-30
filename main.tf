@@ -12,6 +12,7 @@ terraform {
 provider "libvirt" {
   uri = "qemu+ssh://root@192.168.1.20/system?sshauth=privkey&keyfile=~/.ssh/id_ecdsa"
   #uri = "qemu+ssh://root@192.168.1.20/system?sshauth=privkey&keyfile=~/.ssh/id_ecdsa&no_verify=1"
+  #uri = "qemu:///system"
 }
 
 module "libvirt_vm" {
