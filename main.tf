@@ -10,7 +10,8 @@ terraform {
 }
 
 provider "libvirt" {
-  uri = "qemu+ssh://tofu@192.168.1.20/system?sshauth=privkey&keyfile=~/.ssh/id_ecdsa&no_verify=1"
+  uri = "qemu+ssh://root@192.168.1.20/system?sshauth=privkey&keyfile=~/.ssh/id_ecdsa"
+  #uri = "qemu+ssh://root@192.168.1.20/system?sshauth=privkey&keyfile=~/.ssh/id_ecdsa&no_verify=1"
 }
 
 module "libvirt_vm" {
@@ -31,7 +32,7 @@ module "libvirt_vm" {
   storage_pool_path   = "/var/lib/libvirt/images/"
 
   # VM parameters
-  local_image_path        = "/var/lib/libvirt/images/ubuntu-24.04-server-cloudimg-amd64.img" # No local image, use cloud image
+  local_image_path        = "/var/lib/libvirt/cloud-images/ubuntu-24.04-server-cloudimg-amd64.img" # No local image, use cloud image
   os_name                 = "ubuntu"
   os_version              = "24.04"
   vm_name                 = "Ubuntu"
