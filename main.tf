@@ -44,7 +44,6 @@ module "libvirt_vm" {
   disk_size               = 20
   graphics_listen_address = "0.0.0.0"
   timezone                = "Africa/Nairobi"
-  ip_address              = ""
 }
 
 output "network_name" {

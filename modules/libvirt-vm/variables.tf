@@ -51,7 +51,7 @@ variable "autostart_network" {
 variable "network_cidr" {
   description = "CIDR for the network (applicable for nat and routed modes)"
   type        = list(string)
-  default     = ["192.168.0.0/24"]
+  default     = ["172.20.0.0/24"]
 }
 
 variable "network_mtu" {
@@ -229,19 +229,19 @@ variable "package_upgrade" {
 variable "ip_address" {
   description = "Static IP address for the VM (if empty, DHCP is used)"
   type        = string
-  default     = "192.168.122.10/24"
+  default     = "172.20.0.10/24"
 }
 
 variable "ip_gateway" {
   description = "Gateway IP address for the VM (required if static IP is set)"
   type        = string
-  default     = "192.168.122.1"
+  default     = "172.20.0.1"
 }
 
 variable "network_interface" {
-  description = "Network interface to use for the VM (e.g., eth0)"
+  description = "Network interface to use for the VM (e.g., ens3)"
   type        = string
-  default     = "eth0"
+  default     = "ens3"
 }
 
 variable "dns_servers" {
