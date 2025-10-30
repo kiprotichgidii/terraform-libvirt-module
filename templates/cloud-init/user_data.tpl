@@ -1,5 +1,4 @@
 #cloud-config
-hostname: ${hostname}
 timezone: ${timezone}
 
 # Hostname management
@@ -16,9 +15,9 @@ users:
     lock_passwd: ${lock_user_password}
     shell: ${user_shell}
     ssh_authorized_keys:
-      %{~ for ssh_key in authorized_keys ~}
+%{~ for ssh_key in split(",", authorized_keys) ~}
       - ${ssh_key}
-      %{~ endfor ~}
+%{~ endfor ~}
     groups: sudo
     home: /home/${user_name}
     manage_home: true
@@ -27,20 +26,24 @@ users:
     lock_passwd: ${lock_root_user_password}
     shell: /bin/bash
     ssh_authorized_keys:
-      %{~ for ssh_key in authorized_keys ~}
-        - ${ssh_key}
-      %{~ endfor ~}
+%{~ for ssh_key in split(",", authorized_keys) ~}
+      - ${ssh_key}
+%{~ endfor ~}
 
 # Set User Password
 chpasswd:
-  expire: False
+  expire: false
   users:
-    %{~ if set_user_password ~}
-    - {name: ${user_name}, password: ${user_password}, type: "crypted"}
-    %{~ endif ~}
-    %{~ if set_root_password ~}
-    - {name: root, password: ${root_password}, type: "crypted"}
-    %{~ endif ~}
+%{~ if set_user_password ~}
+    - name: ${user_name}
+      password: ${user_password}
+      type: "crypted"
+%{~ endif ~}
+%{~ if set_root_password ~}
+    - name: root
+      password: ${root_password}
+      type: "crypted"
+%{~ endif ~}
 
 # Grow the root partition to fill the disk
 growpart:
@@ -48,28 +51,24 @@ growpart:
   devices: ['/']
 resize_rootfs: true
 
-# Update and Upgrade Packages
-%{~ if package_update ~}
+# Package Management
 package_update: ${package_update}
-%{~ endif ~}
-%{~ if package_upgrade ~}
 package_upgrade: ${package_upgrade}
-%{~ endif ~}
 
 # Install Additional Packages
-%{~ if packages == "" ~}
+%{~ if packages != "" ~}
 packages:
-  %{~ for package in packages ~}  
-    - ${package}
-  %{~ endfor ~}
+%{~ for package in split(",", packages) ~}
+  - ${package}
+%{~ endfor ~}
 %{~ endif ~}
 
 # First Boot Commands
 %{~ if runcmds != "" ~}
 runcmd:
-  %{~ for cmd in runcmds ~}
-    - ${cmd}
-  %{~ endfor ~}
+%{~ for cmd in split(",", runcmds) ~}
+  - ${cmd}
+%{~ endfor ~}
 %{~ endif ~}
 
 # Disable IPv6 if specified

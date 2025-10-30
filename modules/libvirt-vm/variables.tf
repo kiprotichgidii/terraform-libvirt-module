@@ -257,6 +257,12 @@ variable "vm_name" {
   default     = "Ubuntu"
 }
 
+variable "hostname" {
+  description = "Hostname for the VM"
+  type        = string
+  default     = ""
+}
+
 variable "memory" {
   description = "Memory size for the VM in MB"
   type        = number

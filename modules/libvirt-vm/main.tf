@@ -164,7 +164,7 @@ data "template_file" "meta_data" {
 
   vars = {
     instance_id = var.vm_name
-    hostname    = var.vm_name
+    hostname    = var.hostname != "" ? var.hostname : var.vm_name
   }
 }
 

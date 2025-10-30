@@ -31,10 +31,11 @@ module "libvirt_vm" {
   storage_pool_path   = "/var/lib/libvirt/images/"
 
   # VM parameters
-  local_image_path       = "/var/lib/libvirt/images/ubuntu-24.04-server-cloudimg-amd64.img"  # No local image, use cloud image
+  local_image_path        = "/var/lib/libvirt/images/ubuntu-24.04-server-cloudimg-amd64.img" # No local image, use cloud image
   os_name                 = "ubuntu"
   os_version              = "24.04"
   vm_name                 = "Ubuntu"
+  hostname                = "ubuntu"
   vm_count                = 1
   memory                  = 2048
   vcpu                    = 2
