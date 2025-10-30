@@ -42,13 +42,7 @@ output "vm_ip_addresses" {
   description = "List of IP addresses assigned to the VM(s)"
   value = {
     for idx, vm in libvirt_domain.vm_domain :
-    vm.name => (
-      var.network_mode == "bridge" && var.enable_dhcp ? (
-        try(vm.network_interface[0].addresses[0], "N/A")
-        ) : (
-        var.network_mode != "bridge" && var.ip_address != "" ? var.ip_address : "N/A"
-      )
-    )
+    vm.name => try(vm.network_interface[0].addresses[0], "N/A")
   }
 }
 
@@ -56,17 +50,7 @@ output "ssh_commands" {
   description = "SSH commands to connect to the VM(s)"
   value = {
     for idx, vm in libvirt_domain.vm_domain :
-    vm.name => (
-      var.network_mode == "bridge" && var.enable_dhcp ? (
-        format("ssh -i %s %s@%s", "${path.cwd}/sshkey.priv", var.user_name, try(vm.network_interface[0].addresses[0], "N/A"))
-        ) : (
-        var.network_mode != "bridge" && var.ip_address != "" ? (
-          format("ssh -i %s %s@%s", "${path.cwd}/id_rsa.key", var.user_name, var.ip_address)
-          ) : (
-          "N/A"
-        )
-      )
-    )
+    vm.name => format("ssh -i %s %s@%s", "${path.cwd}/sshkey.priv", var.user_name, try(vm.network_interface[0].addresses[0], "N/A"))
   }
   sensitive = false
 }
