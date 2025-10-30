@@ -229,13 +229,13 @@ variable "package_upgrade" {
 variable "ip_address" {
   description = "Static IP address for the VM (if empty, DHCP is used)"
   type        = string
-  default     = "172.20.0.10/24"
+  default     = "192.168.122.10/24"
 }
 
 variable "ip_gateway" {
   description = "Gateway IP address for the VM (required if static IP is set)"
   type        = string
-  default     = "172.20.0.1"
+  default     = "192.168.122.1"
 }
 
 variable "network_interface" {

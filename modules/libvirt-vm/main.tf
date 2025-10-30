@@ -192,7 +192,7 @@ resource "libvirt_domain" "vm_domain" {
   cloudinit  = libvirt_cloudinit_disk.commoninit.id
 
   network_interface {
-    network_name   = var.network_name
+    network_name   = var.create_network ? libvirt_network.vm_network[0].name : var.network_name
     wait_for_lease = true
   }
 
