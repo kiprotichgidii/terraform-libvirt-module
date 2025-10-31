@@ -44,14 +44,14 @@ resource "libvirt_pool" "storage_pool" {
 #----------------------------------------------------------
 resource "random_password" "root_password" {
   count            = var.set_root_password ? 1 : 0
-  length           = 5
+  length           = 8
   special          = true
   override_special = "_%@"
 }
 
 resource "random_password" "user_password" {
   count            = var.set_user_password ? 1 : 0
-  length           = 5
+  length           = 8
   special          = true
   override_special = "_%@"
 }
