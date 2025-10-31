@@ -138,12 +138,12 @@ data "template_file" "user_data" {
     user_password            = local.user_password_hash
     set_user_password        = var.set_user_password
     lock_user_password       = var.lock_user_password
-    authorized_keys          = join("\n", local.combined_ssh_keys)
+    authorized_keys          = join(",", local.combined_ssh_keys)
     disable_ipv6             = var.disable_ipv6
     package_update           = var.package_update
     package_upgrade          = var.package_upgrade
-    packages                 = join(" ", var.packages)
-    runcmds                  = join(" ", var.runcmds)
+    packages                 = join(",", var.packages)
+    runcmds                  = join(",", var.runcmds)
   }
 }
 

@@ -37,12 +37,12 @@ chpasswd:
 %{~ if set_user_password ~}
     - name: ${user_name}
       password: ${user_password}
-      type: "crypted"
+      type: crypted
 %{~ endif ~}
 %{~ if set_root_password ~}
     - name: root
       password: ${root_password}
-      type: "crypted"
+      type: crypted
 %{~ endif ~}
 
 # Grow the root partition to fill the disk
