@@ -21,14 +21,14 @@ module "libvirt_vm" {
 
   # Network parameters
   create_network    = true
-  network_name      = "opentofu"
+  network_name      = "opentofu-net"
   network_mode      = "nat"
   autostart_network = true
-  network_cidr      = ["192.168.0.0/24"]
+  network_cidr      = ["172.20.0.0/24"]
 
   # Storage Pool parameters
   create_storage_pool = true
-  storage_pool_name   = "default_pool"
+  storage_pool_name   = "opentofu-pool"
   storage_pool_type   = "dir"
   storage_pool_path   = "/var/lib/libvirt/images/"
 

@@ -100,7 +100,7 @@ resource "libvirt_volume" "base_image" {
   count  = var.local_image_path != "" || module.cloud_images.available ? 1 : 0
   name   = "${var.vm_name}-base.qcow2"
   pool   = var.create_storage_pool ? libvirt_pool.storage_pool[0].name : var.storage_pool_name
-  source = var.local_image_path != "" ? var.local_image_path : module.cloud_images.url 
+  source = var.local_image_path != "" ? var.local_image_path : module.cloud_images.url
   format = "qcow2"
 }
 
@@ -108,72 +108,79 @@ resource "libvirt_volume" "base_image" {
 # Create a copy-on-write volume for the VM
 #----------------------------------------------------------
 resource "libvirt_volume" "vm_disk" {
-  count            = var.vm_count
-  name             = "${var.vm_name}.qcow2"
-  base_volume_id   = libvirt_volume.base_image[count.index].id
+  count          = var.vm_count
+  name           = "${var.vm_name}.qcow2"
+  base_volume_id = libvirt_volume.base_image[count.index].id
   #base_volume_name = libvirt_volume.base_image[count.index].name
-  pool             = var.create_storage_pool ? libvirt_pool.storage_pool[0].name : var.storage_pool_name
-  format           = "qcow2"
-  size             = 1024 * 1024 * 1024 * var.disk_size
+  pool   = var.create_storage_pool ? libvirt_pool.storage_pool[0].name : var.storage_pool_name
+  format = "qcow2"
+  size   = 1024 * 1024 * 1024 * var.disk_size
 }
 
 #----------------------------------------------------------
 # Generate Cloud-Init ISO
 #----------------------------------------------------------
-data "template_file" "user_data" {
-  template = file("${path.module}/templates/cloud-init/user_data.tpl")
+data "template_cloudinit_config" "cloudinit" {
+  count         = var.vm_count
+  gzip          = false
+  base64_encode = false
 
-  vars = {
-    timezone                 = var.timezone
-    manage_etc_hosts         = var.manage_etc_hosts
-    preserve_hostname        = var.preserve_hostname
-    enable_ssh_password_auth = var.enable_ssh_password_auth
-    disable_ssh_root_login   = var.disable_ssh_root_login
-    lock_root_user_password  = var.lock_root_user_password
-    set_root_password        = var.set_root_password
-    root_password            = local.root_password_hash
-    user_name                = var.user_name
-    user_fullname            = var.ssh_user_fullname
-    user_shell               = var.ssh_user_shell
-    user_password            = local.user_password_hash
-    set_user_password        = var.set_user_password
-    lock_user_password       = var.lock_user_password
-    authorized_keys          = join(",", local.combined_ssh_keys)
-    disable_ipv6             = var.disable_ipv6
-    package_update           = var.package_update
-    package_upgrade          = var.package_upgrade
-    packages                 = join(",", var.packages)
-    runcmds                  = join(",", var.runcmds)
+  part {
+    filename     = "user-data"
+    content_type = "text/cloud-config"
+    content = templatefile("${path.module}/templates/cloud-init/user_data.tpl", {
+
+      timezone                 = var.timezone
+      manage_etc_hosts         = var.manage_etc_hosts
+      preserve_hostname        = var.preserve_hostname
+      enable_ssh_password_auth = var.enable_ssh_password_auth
+      disable_ssh_root_login   = var.disable_ssh_root_login
+      lock_root_user_password  = var.lock_root_user_password
+      set_root_password        = var.set_root_password
+      root_password            = local.root_password_hash
+      user_name                = var.user_name
+      user_fullname            = var.ssh_user_fullname
+      user_shell               = var.ssh_user_shell
+      user_password            = local.user_password_hash
+      set_user_password        = var.set_user_password
+      lock_user_password       = var.lock_user_password
+      authorized_keys          = local.combined_ssh_keys
+      disable_ipv6             = var.disable_ipv6
+      package_update           = var.package_update
+      package_upgrade          = var.package_upgrade
+      packages                 = var.packages
+      runcmds                  = var.runcmds
+    })
   }
-}
 
-data "template_file" "network_config" {
-  template = file("${path.module}/templates/cloud-init/network_config.tpl")
+  part {
+    filename     = "meta-data"
+    content_type = "text/cloud-config"
+    content = templatefile("${path.module}/templates/cloud-init/meta_data.tpl", {
 
-  vars = {
-    ip_address  = var.ip_address
-    gateway     = var.ip_gateway
-    nic         = var.network_interface
-    enable_dhcp = var.enable_dhcp
-    dns         = join(" ", var.dns_servers)
+      instance_id = var.vm_name
+      hostname    = var.hostname != "" ? var.hostname : var.vm_name
+    })
   }
-}
 
-data "template_file" "meta_data" {
-  template = file("${path.module}/templates/cloud-init/meta_data.tpl")
+  part {
+    filename     = "network-config"
+    content_type = "text/cloud-config"
+    content = templatefile("${path.module}/templates/cloud-init/network_config.tpl", {
 
-  vars = {
-    instance_id = var.vm_name
-    hostname    = var.hostname != "" ? var.hostname : var.vm_name
+      ip_address  = var.ip_address
+      gateway     = var.ip_gateway
+      nic         = var.network_interface
+      enable_dhcp = var.enable_dhcp
+      dns_servers = var.dns_servers
+    })
   }
 }
 
 resource "libvirt_cloudinit_disk" "commoninit" {
   name           = "${var.vm_name}-cloudinit.iso"
   pool           = var.create_storage_pool ? libvirt_pool.storage_pool[0].name : var.storage_pool_name
-  user_data      = data.template_file.user_data.rendered
-  meta_data      = data.template_file.meta_data.rendered
-  network_config = data.template_file.network_config.rendered
+  user_data      = data.template_cloudinit_config.cloudinit[0].rendered
 }
 
 #----------------------------------------------------------
@@ -197,10 +204,10 @@ resource "libvirt_domain" "vm_domain" {
   }
 
   graphics {
-    type        = "vnc"
-    listen_type = "address"
+    type           = "vnc"
+    listen_type    = "address"
     listen_address = var.graphics_listen_address
-    autoport    = true
+    autoport       = true
   }
 
   console {
