@@ -178,11 +178,12 @@ data "template_cloudinit_config" "cloudinit" {
 }
 
 resource "libvirt_cloudinit_disk" "commoninit" {
+  count          = var.vm_count
   name           = "${var.vm_name}-cloudinit.iso"
   pool           = var.create_storage_pool ? libvirt_pool.storage_pool[0].name : var.storage_pool_name
-  user_data      = data.template_cloudinit_config.cloudinit[0].rendered
-  meta_data      = data.template_cloudinit_config.cloudinit[0].part[1].content
-  network_config = data.template_cloudinit_config.cloudinit[0].part[2].content
+  user_data      = data.template_cloudinit_config.cloudinit[count.index].rendered
+  meta_data      = data.template_cloudinit_config.cloudinit[count.index].part[1].content
+  network_config = data.template_cloudinit_config.cloudinit[count.index].part[2].content
 }
 
 #----------------------------------------------------------
@@ -198,7 +199,7 @@ resource "libvirt_domain" "vm_domain" {
   vcpu       = var.vcpu
   autostart  = var.autostart_vm
   qemu_agent = true
-  cloudinit  = libvirt_cloudinit_disk.commoninit.id
+  cloudinit  = libvirt_cloudinit_disk.commoninit[count.index].id
 
   network_interface {
     network_name   = var.create_network ? libvirt_network.vm_network[0].name : var.network_name
