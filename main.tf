@@ -37,7 +37,7 @@ module "libvirt_vm" {
   os_name                 = "ubuntu"
   os_version              = "24.04"
   vm_name                 = "Ubuntu"
-  hostname                = "ubuntu"
+  hostname                = "ubuntu-noble"
   vm_count                = 1
   memory                  = 2048
   vcpu                    = 2
