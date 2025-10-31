@@ -181,6 +181,8 @@ resource "libvirt_cloudinit_disk" "commoninit" {
   name           = "${var.vm_name}-cloudinit.iso"
   pool           = var.create_storage_pool ? libvirt_pool.storage_pool[0].name : var.storage_pool_name
   user_data      = data.template_cloudinit_config.cloudinit[0].rendered
+  meta_data      = data.template_cloudinit_config.cloudinit[0].part[1].content
+  network_config = data.template_cloudinit_config.cloudinit[0].part[2].content
 }
 
 #----------------------------------------------------------
