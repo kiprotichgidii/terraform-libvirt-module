@@ -211,7 +211,7 @@ variable "runcmds" {
 variable "disable_ipv6" {
   description = "Whether to disable IPv6 on the VM"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "package_update" {
