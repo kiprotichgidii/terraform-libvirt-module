@@ -50,7 +50,7 @@ output "ssh_commands" {
   description = "SSH commands to connect to the VM(s)"
   value = {
     for idx, vm in libvirt_domain.vm_domain :
-    vm.name => format("ssh -i %s %s@%s", "${path.cwd}/sshkey.priv", var.user_name, try(vm.network_interface[0].addresses[0], "N/A"))
+    vm.name => format("ssh -i %s %s@%s", "${path.cwd}/id_rsa.key", var.user_name, try(vm.network_interface[0].addresses[0], "N/A"))
   }
   sensitive = false
 }
