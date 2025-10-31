@@ -160,6 +160,7 @@ data "template_cloudinit_config" "cloudinit" {
 
       instance_id = var.vm_name
       hostname    = var.hostname != "" ? var.hostname : var.vm_name
+     # fqdn        = format("%s.%s", var.hostname != "" ? var.hostname : var.vm_name, var.vm_domain != "" ? var.vm_domain : "localdomain")
     })
   }
 

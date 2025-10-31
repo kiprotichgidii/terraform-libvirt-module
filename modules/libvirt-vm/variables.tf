@@ -66,6 +66,12 @@ variable "enable_dhcp" {
   default     = true
 }
 
+variable "vm_domain" {
+  description = "Domain name for the VM (used in network configuration)"
+  type        = string
+  default     = "home.local"
+}
+
 # Storage Pool Variables
 variable "create_storage_pool" {
   description = "Whether to create a new libvirt storage pool"
