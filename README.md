@@ -154,7 +154,9 @@ output "ssh_commands" {
 | `storage_pool_type` | `string` | `"dir"` | Pool type (`dir`, `logical`, `zfs`, etc.). |
 | `storage_pool_path` | `string` | `"/var/lib/..."` | Path on host for the storage pool. |
 
-### User & Security
+### Cloud-init Variables
+
+#### User & Security
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `user_name` | `string` | `"cloud-user"` | Default username to create. |
@@ -169,7 +171,7 @@ output "ssh_commands" {
 | `disable_ssh_root_login` | `bool` | `true` | Disable SSH login for root user. |
 | `enable_ssh_password_auth`| `bool` | `false` | Allow password authentication for SSH. |
 
-### System Management
+#### System Management
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `package_update` | `bool` | `true` | Run `apt-get update` on first boot. |
